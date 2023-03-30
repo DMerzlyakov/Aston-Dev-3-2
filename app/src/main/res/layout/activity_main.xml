@@ -16,7 +16,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/default_url"/>
 
     <Button
         android:id="@+id/button"
@@ -33,11 +34,12 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/img_view_height"
         android:layout_height="@dimen/img_view_height"
-        android:background="#9C9C9C"
+        android:layout_margin="@dimen/default_button_margin"
+        android:background="@color/image_view_background"
         android:contentDescription="@string/content_description_image"
-        android:scaleType="centerCrop"
+        android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

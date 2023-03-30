@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -47,14 +46,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void toastShow(String textToast) {
-        Toast toast = Toast.makeText(
-                this, textToast,
-                Toast.LENGTH_SHORT
-        );
+        Toast toast = Toast.makeText(this, textToast, Toast.LENGTH_SHORT);
         toast.show();
     }
 
 
+    /**
+     * Класс для загрузки изображений, который наследуется от AsyncTask,
+     * позволяет не останавливать основной поток приложения
+     */
     private class ImageDownloader extends AsyncTask<String, Integer, Bitmap> {
         @Override
         protected Bitmap doInBackground(String... strings) {
@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 binding.imageView.setImageBitmap(data);
             } else {
                 toastShow(getString(R.string.error_download));
+                binding.imageView.setImageResource(R.drawable.image_not_available);
             }
         }
     }

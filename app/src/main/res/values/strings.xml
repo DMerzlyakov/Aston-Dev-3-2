@@ -1,7 +1,8 @@
 <resources>
-    <string name="app_name">Aston-dev-3-2</string>
+    <string name="app_name">Aston-dev-3-2-hard</string>
     <string name="download_text">Download</string>
     <string name="content_description_image">downloaded image</string>
     <string name="error_empty_url">Введите ссылку на изображение</string>
-    <string name="default_url">https://picsum.photos/750</string>
+    <string name="default_url">https://picsum.photos/1000</string>
+    <string name="error_download">Ошибка в загрузке изображения</string>
 </resources>

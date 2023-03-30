@@ -2,16 +2,22 @@ package com.example.aston_dev_3_2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.aston_dev_3_2.databinding.ActivityMainBinding;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
+
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -24,27 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-
         binding.button.setOnClickListener(this);
-    }
-
-
-    private void loadImageFromURL(String url) {
-        Picasso.get()
-                .load(url)
-                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
-                .error(R.drawable.image_not_available)
-                .fit()
-                .into(binding.imageView, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        toastShow("Ошибка: " + e.getMessage());
-                    }
-                });
     }
 
     @Override
@@ -53,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()) {
             case R.id.button:
                 if (!binding.editText.getText().toString().equals("")) {
-                    loadImageFromURL(binding.editText.getText().toString());
+                    new ImageDownloader().execute(binding.editText.getText().toString());
                 } else {
                     toastShow(getString(R.string.error_empty_url));
                 }
@@ -66,5 +52,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.LENGTH_SHORT
         );
         toast.show();
+    }
+
+
+    private class ImageDownloader extends AsyncTask<String, Integer, Bitmap> {
+        @Override
+        protected Bitmap doInBackground(String... strings) {
+            Bitmap bitmap = null;
+            try {
+                URL url = new URL(strings[0]);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.connect();
+                if (httpURLConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    InputStream inputStream = new BufferedInputStream(httpURLConnection.getInputStream());
+                    bitmap = BitmapFactory.decodeStream(inputStream);
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return bitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap data) {
+            if (data != null) {
+                binding.imageView.setImageBitmap(data);
+            } else {
+                toastShow(getString(R.string.error_download));
+            }
+        }
     }
 }

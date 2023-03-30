@@ -28,13 +28,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding.button.setOnClickListener(this);
     }
 
-
+    /**
+     * Метод для загрузки изображения через Picasso
+     */
     private void loadImageFromURL(String url) {
         Picasso.get()
                 .load(url)
                 .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                 .error(R.drawable.image_not_available)
-                .fit()
+//                Если хотим преобразовать все размеры изображений в один формат
+//                .fit()
                 .into(binding.imageView, new Callback() {
                     @Override
                     public void onSuccess() {
@@ -60,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+
+    /** Метод для формирования и отображения Toast */
     private void toastShow(String textToast) {
         Toast toast = Toast.makeText(
                 this, textToast,
